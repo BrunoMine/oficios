@@ -1,0 +1,32 @@
+API.txt
+
+Pontos importantes
+* Jamais pode existir dois item como o mesmo nome (description)
+* So pode montar 1 item especial por vez (jamais quantidades acima de 1 por vez)
+* Pode ter de 1 a 6 tipos de itens requisitados podem variar suas quantidades individuais
+* Apos o jogador sair do servidor os seus dados nao serao mais encontrados ate que entre novamente
+* Nao pode existir itens cujo tempo total de montagem seja menor que 1 minuto (minimo 1 minuto)
+* A principio nao deve existir mais de 10 receitas por oficio para nao travar muito o sistema e os jogadores
+* Jamais usar itens com o profixo group nas strings dos itens (ex.: "groups:stick", "groups") ou qualquer outro prefixo
+
+Funcoao de insercao no banco de dados (todos os valores sao obrigatorios)
+oficios.montar_receita(
+
+	oficio, -- Nome do oficio que podera realizar (ex. "cozinheiro")
+
+	item, -- Item a ser criado (ex. "default:wood")
+
+	nivel, -- Nivel requerido (ex. 5)
+
+	desc, -- Breve descricao do item com ate 4 linhas com ate 26 caracteres de largura mediana
+			(ex. "Esse item pode ser util \nem varios casos e lhe traz \nmelhor desempenho no jogo.")
+
+	xp, -- Quantidade de XP recebido ao terminar (ex. 20)
+
+	item_requisitado, -- Tabela de itens requeridos (de 1 a 6 itens) (ex. {{"default:stone", 5},{"default:stick", 1}})
+
+	tempo -- Tempo que demora para concluir em dias(0 a 25), horas(0 a 23) e minutos(0 a 59) no formato {dd,hh,mm} 
+		(ex. {00,00,05}) 
+
+)
+
