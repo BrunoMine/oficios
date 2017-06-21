@@ -12,6 +12,14 @@
 
 
 
+-- Botao de retorno
+local bt_sair = function(loc)
+	if sfinv then
+		return "button_exit["..loc..";sair_menu_sfinv;Sair]"
+	else
+		return "button_exit["..loc..";;Sair]"
+	end
+end
 
 --
 -----
@@ -90,7 +98,7 @@ end
 local receita_visualizada = {}
 local visualizando_desc = {}
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-	
+
 	-- Menu de Escolha
 	if formname == "oficios:menu_de_escolha" then
 		local name = player:get_player_name()
@@ -247,6 +255,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	
+	
 end)
 -- Fim do Receptor de Botoes
 --------
@@ -358,7 +367,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					"\n\nTermina em \n"..tempo_escrito.."]"..
 					"item_image_button[2.2,0.6;2,2;"..item_id..";;]"..
 					-- Botao sair
-					"button_exit[6.9,3.3;1.2,1;;Sair]"	
+					bt_sair("6.9,3.3;1.2,1")	
 				
 			end
 
@@ -380,7 +389,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
 					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
 					-- Botao sair
-					"button_exit[6.9,3.3;1.2,1;;Sair]"..
+					bt_sair("6.9,3.3;1.2,1")..
 					-- Painel de Montagem
 					"dropdown[2.2,0.35;6.15,1;item_selecionado;"..lista_receitas[oficio]..";]"..
 					"label[2.2,1.1;Selecione algo para produzir]"
@@ -409,7 +418,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					"label[5.2,1;Montado]"..
 					"item_image_button[2.2,1;3,3;"..registros_oficios[name].coletar..";coletar;Coletar]"..
 					-- Botao sair
-					"button_exit[6.9,3.3;1.2,1;;Sair]"
+					bt_sair()
 
 			end
 		end
@@ -539,7 +548,7 @@ end
 -- Abrir o menu de oficios
 local acesso_ok = false -- variavel que informa se todos os oficios possuem receitas (para evitar bugs)
 oficios.abrir_menu = function(name)
-	
+
 	if acesso_ok == false then
 		-- Verifica se ja todos oficios possuem receita
 		if table.maxn(vetor_niveis.ferreiro) > 0 
@@ -554,6 +563,12 @@ oficios.abrir_menu = function(name)
 		end
 	end
 	
+	-- Verifica se esta registrado
+	if registros_oficios[name] == nil then
+		oficios.bd.inserir(name)
+	end
+	
+	-- Verifica se ja escolheu profissao
 	if registros_oficios[name].oficio == "ferreiro" 
 		or registros_oficios[name].oficio == "cientista" 
 		or registros_oficios[name].oficio == "cozinheiro"
@@ -565,3 +580,31 @@ oficios.abrir_menu = function(name)
 	end
 end
 
+-- Registrar em 'sfinv'
+if sfinv then
+	sfinv.register_page("oficios:oficio", {
+		title = "Oficio",
+		get = function(self, player, context)
+			return sfinv.make_formspec(player, context, [[
+				button[2.5,1.5;3,1;oficios:abrir_menu;Abrir Menu]
+				listring[current_player;main]
+				listring[current_player;craft]
+				image[0,4.75;1,1;gui_hb_bg.png]
+				image[1,4.75;1,1;gui_hb_bg.png]
+				image[2,4.75;1,1;gui_hb_bg.png]
+				image[3,4.75;1,1;gui_hb_bg.png]
+				image[4,4.75;1,1;gui_hb_bg.png]
+				image[5,4.75;1,1;gui_hb_bg.png]
+				image[6,4.75;1,1;gui_hb_bg.png]
+				image[7,4.75;1,1;gui_hb_bg.png]
+			]], true)
+		end
+	})
+end
+
+-- Receber botao do inventario
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+	if fields["oficios:abrir_menu"] then
+		oficios.abrir_menu(player:get_player_name())
+	end
+end)
