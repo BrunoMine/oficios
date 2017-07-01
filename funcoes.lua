@@ -21,6 +21,20 @@ local bt_sair = function(loc)
 	end
 end
 
+
+-- Show Formspec
+oficios.show_formspec = minetest.show_formspec
+
+
+-- Formspec de inventario (para formspecs com inventario)
+local inv_formspec = function(x,y)
+	local form = [[
+		list[current_player;main;0,4.25;8,1;]
+		list[current_player;main;0,5.5;8,3;8]
+	]] .. default.gui_slots .. default.get_hotbar_bg(x,y)
+	return form
+end
+
 --
 -----
 --------
@@ -97,19 +111,19 @@ end
 -- Receptor de Botoes
 local receita_visualizada = {}
 local visualizando_desc = {}
-minetest.register_on_player_receive_fields(function(player, formname, fields)
+oficios.on_receive_fields = function(player, formname, fields)
 
 	-- Menu de Escolha
 	if formname == "oficios:menu_de_escolha" then
 		local name = player:get_player_name()
 		if fields.escolher_ferreiro then
-			minetest.show_formspec(name, "oficios:desc_ferreiro", oficios.form.desc_ferreiro)
+			return oficios.show_formspec(name, "oficios:desc_ferreiro", oficios.form.desc_ferreiro)
 		elseif fields.escolher_cientista then
-			minetest.show_formspec(name, "oficios:desc_cientista", oficios.form.desc_cientista)
+			return oficios.show_formspec(name, "oficios:desc_cientista", oficios.form.desc_cientista)
 		elseif fields.escolher_cozinheiro then
-			minetest.show_formspec(name, "oficios:desc_cozinheiro", oficios.form.desc_cozinheiro)
+			return oficios.show_formspec(name, "oficios:desc_cozinheiro", oficios.form.desc_cozinheiro)
 		elseif fields.escolher_construtor then
-			minetest.show_formspec(name, "oficios:desc_construtor", oficios.form.desc_construtor)
+			return oficios.show_formspec(name, "oficios:desc_construtor", oficios.form.desc_construtor)
 		end
 	end
 
@@ -123,20 +137,20 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	then
 		local name = player:get_player_name()
 		if fields.voltar then
-			minetest.show_formspec(name, "oficios:menu_de_escolha", oficios.form.inicial)
+			return oficios.show_formspec(name, "oficios:menu_de_escolha", oficios.form.inicial)
 		elseif fields.aceitar then
 			if formname == "oficios:desc_ferreiro" then
 				oficios.bd.definir_oficio(name, "ferreiro")
-				oficios.gerar_menu_oficio(name)
+				return oficios.gerar_menu_oficio(name)
 			elseif formname == "oficios:desc_cientista" then
 				oficios.bd.definir_oficio(name, "cientista")
-				oficios.gerar_menu_oficio(name)
+				return oficios.gerar_menu_oficio(name)
 			elseif formname == "oficios:desc_cozinheiro" then
 				oficios.bd.definir_oficio(name, "cozinheiro")
-				oficios.gerar_menu_oficio(name)
+				return oficios.gerar_menu_oficio(name)
 			elseif formname == "oficios:desc_construtor" then
 				oficios.bd.definir_oficio(name, "construtor")
-				oficios.gerar_menu_oficio(name)
+				return oficios.gerar_menu_oficio(name)
 			end
 		end
 	end
@@ -158,33 +172,33 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 		if n == 1 and fields.item_selecionado then
 			receita_visualizada[name] = fields.item_selecionado
-			oficios.gerar_menu_oficio(name, fields.item_selecionado)
+			return oficios.gerar_menu_oficio(name, fields.item_selecionado)
 		end
 		
 		
 		-- voltar
 		if fields.voltar then
-			oficios.gerar_menu_oficio(name)
+			return oficios.gerar_menu_oficio(name)
 		end
 		-- voltar ao item
 		if fields.voltar_ao_item then
 			visualizando_desc[name] = false
-			oficios.gerar_menu_oficio(name, receita_visualizada[name])
+			return oficios.gerar_menu_oficio(name, receita_visualizada[name])
 		end
 		
 		-- Ver descricao
 		if fields.desc then
 			visualizando_desc[name] = true
-			oficios.gerar_menu_oficio(name, receita_visualizada[name])
+			return oficios.gerar_menu_oficio(name, receita_visualizada[name])
 		end
 		-- Coletar
 		if fields.coletar then
 			if player:get_inventory():room_for_item("main", registros_oficios[name].coletar) then
 				player:get_inventory():add_item("main", registros_oficios[name].coletar)
 				oficios.bd.coletou_item(name)
-				oficios.gerar_menu_oficio(name)
+				return oficios.gerar_menu_oficio(name)
 			else
-				return minetest.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_inv_lotado)
+				return oficios.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_inv_lotado)
 			end
 			
 		end
@@ -194,7 +208,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 			local dados = oficios.receitas[tabela_IDNome[receita_visualizada[name]].item_nome_real]
 			-- Verifica o nivel
 			if registros_oficios[name].nivel < dados.nivel then
-				return minetest.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_nivel_insuficiente)
+				return oficios.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_nivel_insuficiente)
 			else
 				
 				local player_inv = player:get_inventory()
@@ -208,7 +222,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 					end
 				end
 				if possui_itens == false then
-					return minetest.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_falta_item)
+					return oficios.show_formspec(name, "oficios:aviso_montagem", oficios.form.aviso_falta_item)
 				end
 				
 				-- Retirar itens
@@ -255,8 +269,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 	
-	
-end)
+end
 -- Fim do Receptor de Botoes
 --------
 -----
@@ -300,8 +313,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				oficios.bd.conluir_montagem(name, oficios.receitas[registros_oficios[name].montagem.item].xp)	
 				
 				-- Iniciar novo processo de geracao do menu
-				oficios.gerar_menu_oficio(name)
-				return
+				return oficios.gerar_menu_oficio(name)
 
 			else
 				
@@ -355,10 +367,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				formspec = "size[8,8.5]"..
 					default.gui_bg..
 					default.gui_bg_img..
-					default.gui_slots..
-					"list[current_player;main;0,4.25;8,1;]"..
-					"list[current_player;main;0,5.5;8,3;8]"..
-					default.get_hotbar_bg(0,4.25)..
+					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
 					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
@@ -381,10 +390,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				formspec = "size[8,8.5]"..
 					default.gui_bg..
 					default.gui_bg_img..
-					default.gui_slots..
-					"list[current_player;main;0,4.25;8,1;]"..
-					"list[current_player;main;0,5.5;8,3;8]"..
-					default.get_hotbar_bg(0,4.25)..
+					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
 					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
@@ -406,10 +412,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				formspec = "size[8,8.5]"..
 					default.gui_bg..
 					default.gui_bg_img..
-					default.gui_slots..
-					"list[current_player;main;0,4.25;8,1;]"..
-					"list[current_player;main;0,5.5;8,3;8]"..
-					default.get_hotbar_bg(0,4.25)..
+					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
 					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
@@ -432,10 +435,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 			formspec = formspec .. "size[8,8.8]"..
 				default.gui_bg..
 				default.gui_bg_img..
-				default.gui_slots..
-				"list[current_player;main;0,4.75;8,1;]"..
-				"list[current_player;main;0,6;8,3;8]"..
-				default.get_hotbar_bg(0,4.75)..
+				inv_formspec(0,4.75)..
 				-- Cabecalho do Oficio
 				"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
 				"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
@@ -459,10 +459,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 			formspec = formspec .. "size[8,8.8]"..
 				default.gui_bg..
 				default.gui_bg_img..
-				default.gui_slots..
-				"list[current_player;main;0,4.75;8,1;]"..
-				"list[current_player;main;0,6;8,3;8]"..
-				default.get_hotbar_bg(0,4.75)..
+				inv_formspec(0,4.75)..
 				"label[2.2,3.1;Itens requisitados]"
 			if item_requisitado[1] ~= nil then
 				formspec = formspec .. "item_image_button[2.2,3.5;1,1;"..item_requisitado[1][1].." "..item_requisitado[1][2]..";item_req1;]"
@@ -537,7 +534,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 
 	end
 
-	minetest.show_formspec(name, "oficios:menu_"..oficio, formspec)
+	return oficios.show_formspec(name, "oficios:menu_"..oficio, formspec)
 end
 -- Fim de Gerar Menu de Oficio
 --------
@@ -559,7 +556,7 @@ oficios.abrir_menu = function(name)
 			acesso_ok = true
 		else
 			-- Bloqueia o acesso
-			return minetest.show_formspec(name, "oficios:aviso_sem_receita", oficios.form.aviso_sem_receita)
+			return oficios.show_formspec(name, "oficios:aviso_sem_receita", oficios.form.aviso_sem_receita)
 		end
 	end
 	
@@ -574,9 +571,9 @@ oficios.abrir_menu = function(name)
 		or registros_oficios[name].oficio == "cozinheiro"
 		or registros_oficios[name].oficio == "construtor"
 	then
-		oficios.gerar_menu_oficio(name)
+		return oficios.gerar_menu_oficio(name)
 	else
-		minetest.show_formspec(name, "oficios:menu_de_escolha", oficios.form.inicial)
+		return oficios.show_formspec(name, "oficios:menu_de_escolha", oficios.form.inicial)
 	end
 end
 
@@ -585,26 +582,47 @@ if sfinv then
 	sfinv.register_page("oficios:oficio", {
 		title = "Oficio",
 		get = function(self, player, context)
-			return sfinv.make_formspec(player, context, [[
-				button[2.5,1.5;3,1;oficios:abrir_menu;Abrir Menu]
-				listring[current_player;main]
-				listring[current_player;craft]
-				image[0,4.75;1,1;gui_hb_bg.png]
-				image[1,4.75;1,1;gui_hb_bg.png]
-				image[2,4.75;1,1;gui_hb_bg.png]
-				image[3,4.75;1,1;gui_hb_bg.png]
-				image[4,4.75;1,1;gui_hb_bg.png]
-				image[5,4.75;1,1;gui_hb_bg.png]
-				image[6,4.75;1,1;gui_hb_bg.png]
-				image[7,4.75;1,1;gui_hb_bg.png]
-			]], true)
-		end
+			if context.formspec then
+				return sfinv.make_formspec(player, context, context.formspec, true)
+			else
+				return oficios.abrir_menu(player:get_player_name())
+			end
+		end,
+		on_player_receive_fields = function(self, player, context, fields)
+			oficios.on_receive_fields(player, context.formname, fields)
+		end,
 	})
+	
+	-- Muda o método de exibição padrão
+	oficios.show_formspec = function(name, formname, formspec)
+		-- Ajuste no formspec (sempre tem inventario)
+		formspec = formspec .. [[
+			image[0,4.75;1,1;gui_hb_bg.png]
+			image[1,4.75;1,1;gui_hb_bg.png]
+			image[2,4.75;1,1;gui_hb_bg.png]
+			image[3,4.75;1,1;gui_hb_bg.png]
+			image[4,4.75;1,1;gui_hb_bg.png]
+			image[5,4.75;1,1;gui_hb_bg.png]
+			image[6,4.75;1,1;gui_hb_bg.png]
+			image[7,4.75;1,1;gui_hb_bg.png]
+		]]
+		local player = minetest.get_player_by_name(name)
+		local context = sfinv.get_or_create_context(player)
+		context.formname = formname
+		context.formspec = formspec
+		sfinv.set_context(player, context)
+		sfinv.set_player_inventory_formspec(player)
+		return sfinv.make_formspec(player, context, formspec, true)
+	end
+	
+	-- Desativa inventario personalizado
+	inv_formspec = function(x,y) return "" end
+	
+	bt_sair = function() return "" end
+	
+else
+	minetest.register_on_player_receive_fields(function(player, formname, fields)
+		oficios.on_receive_fields(player, formname, fields)
+	end)
 end
 
--- Receber botao do inventario
-minetest.register_on_player_receive_fields(function(player, formname, fields)
-	if fields["oficios:abrir_menu"] then
-		oficios.abrir_menu(player:get_player_name())
-	end
-end)
