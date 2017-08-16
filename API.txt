@@ -30,3 +30,13 @@ oficios.montar_receita(
 
 )
 
+Funcao para retornar tabela de dados de oficio de um jogador 
+oficios.ver_oficio(name)
+(ATENÇÃO: funciona apenas quando o jogador esta online, caso contrario retorna nulo)
+Tabela retornada
+{
+	oficio = "cozinheiro", -- Tipo de Ofício
+	nivel = 1, -- Nível
+	xp = 0, -- XP ganho
+end
+

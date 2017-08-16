@@ -626,3 +626,12 @@ else
 	end)
 end
 
+-- Ver oficio de um jogador
+oficios.ver_oficio = function(name)
+	if registros_oficios[name] then
+		return minetest.deserialize(minetest.serialize(registros_oficios[name]))
+	else
+		return nil
+	end
+end
+
