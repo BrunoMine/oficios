@@ -1,0 +1,15 @@
+{
+    "name": "oficios",
+    "description": "Ofícios para Minetest",
+    "keywords": [
+        "oficios"
+    ],
+    "homepage": "https://github.com/BrunoMine/oficios",
+    "forum": "https://forum.minetest.net/viewtopic.php?t=1",
+    "screenshots": [
+        "https://github.com/BrunoMine/oficios/blob/master/screenshot.png"
+    ],
+    "authors": [
+        "BrunoMine"
+    ]
+}
