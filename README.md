@@ -1,29 +1,24 @@
-# Oficios v1.0.0
+# Oficios para Minetest
 
-[![Baixar](https://img.shields.io/badge/Baixar-v1.0.0-green.svg)](https://github.com/BrunoMine/oficios/archive/v1.0.0.zip)
-[![Projeto](https://img.shields.io/badge/Git-Projeto-green.svg)](https://github.com/BrunoMine/oficios)
-[![Licença](https://img.shields.io/badge/Licença-LGPL_v3.0-blue.svg)](https://github.com/BrunoMine/oficios/blob/master/LICENSE)
+[![download](https://img.shields.io/github/tag/BrunoMine/sociedades.svg?style=flat-square&label=release)](https://github.com/BrunoMine/oficios/archive/master.zip)
+[![git](https://img.shields.io/badge/git-project-green.svg?style=flat-square)](https://github.com/BrunoMine/oficios)
+[![forum](https://img.shields.io/badge/minetest-mod-green.svg?style=flat-square)](https://forum.minetest.net)
+[![bower](https://img.shields.io/badge/bower-mod-green.svg?style=flat-square)](https://minetest-bower.herokuapp.com/mods/oficios)
 
-## Descrição
-API de oficios
-
-## Recursos do projeto
-
-* [Baixar](https://github.com/BrunoMine/oficios/archive/v1.0.0.zip)
-* [Projeto](https://github.com/BrunoMine/oficios)
-
-## Requisitos
-
-* Minetest 0.4.15 ou superior
+## Requitos
+* Minetest 0.5.0 ou superior
+* Mod shields
+* Mod shooter
+* Mod macronodes
+* Mod macronodes (opicional)
+* Mod sfinv (opicional)
 * Mod default
+* Mod wool
+* Mod beds
+* Mod stairs
+* Mod fire
+* Mod tnt
 
-## Licença
-Veja LICENSE.txt para informações detalhadas da licença LGPL 3.0
-
-### Autores do código fonte
-Originalmente por BrunoMine, Bruno Borges <borgesdossantosbruno@gmail.com> (LGPL 3.0)
-
-### Autores de mídias (texturas, modelos and sons)
-Todos os que não estão listados aqui são de autoria de 
-BrunoMine, Bruno Borges <borgesdossantosbruno@gmail.com> (CC BY-SA 3.0)
+## Sobre
+Esse modpack adiciona oficios em minetest.
 

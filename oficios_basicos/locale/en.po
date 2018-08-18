@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-08-18 01:17-0300\n"
+"PO-Revision-Date: 2018-08-18 01:18-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cientista.lua
+msgid "Bau Expandido"
+msgstr "Extended Chest"
+
+#: cientista.lua
+msgid ""
+"Esse baú cabe mais coisas do que imagina. Perfeito para colocar tralhas."
+msgstr "This chest fits more things than you think. Perfect for putting junk."
+
+#: cientista.lua
+msgid "Esse belo mosquete consegue atingir um alvo a 20 blocos de distância."
+msgstr "This beautiful musket can reach a target 20 blocks away."
+
+#: construtor.lua
+msgid "Mesa"
+msgstr "Table"
+
+#: construtor.lua
+msgid "Uma mesa simples para decorar o ambiente."
+msgstr "A simple table to decorate a room."
+
+#: cozinheiro.lua
+msgid "Bolinho Simples"
+msgstr "Simple Cake"
+
+#: cozinheiro.lua
+msgid "Um singelo bolinho perfeito para a um lanche de tardinha."
+msgstr "A simple coke perfect for a snack."
+
+#: ferreiro.lua
+msgid ""
+"Esse escudo parece mais pesado e resistente do que um simples Escudo de "
+"Madeira comum."
+msgstr ""
+"This shield looks heavier and sturdier than a simple ordinary wood shield."
+
+#: ferreiro.lua
+msgid "Isqueiro"
+msgstr "Lighter"
+
+#: ferreiro.lua
+msgid "É realmente necessário falar sobre quão útil é um isqueiro?"
+msgstr "Is it really necessary to talk about how useful a lighter is?"
+
+#~ msgid "Agora pode levar o poder do fogo em seu bolso (inventário)."
+#~ msgstr "Now you can carry the power of fire in your pocket (inventory)."

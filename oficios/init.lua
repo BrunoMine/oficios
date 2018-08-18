@@ -1,6 +1,6 @@
 --[[
 	Mod Oficios para Minetest
-	Copyright (C) 2017 BrunoMine (https://github.com/BrunoMine)
+	Copyright (C) 2018 BrunoMine (https://github.com/BrunoMine)
 	
 	Recebeste uma cópia da GNU Lesser General
 	Public License junto com esse software,
@@ -16,6 +16,9 @@ oficios = {}
 oficios.receitas = {}
 
 minetest.log('verbose',"[OFICIOS] iniciando carreamento...")
+
+dofile(path.."/tradutor.lua")
+minetest.log('verbose',"[OFICIOS] tradutor carregado...")
 
 dofile(path.."/diretrizes.lua")
 minetest.log('verbose',"[OFICIOS] diretrizes carregadas...")

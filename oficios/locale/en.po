@@ -1,0 +1,244 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-08-17 21:19-0300\n"
+"PO-Revision-Date: 2018-08-17 21:25-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: formularios.lua
+msgid "Escolha o seu Ofício"
+msgstr "Choose your Metier"
+
+#: formularios.lua funcoes.lua
+msgid "Ferreiro"
+msgstr "Blacksmith"
+
+#: formularios.lua funcoes.lua
+msgid "Cientista"
+msgstr "Scientist"
+
+#: formularios.lua funcoes.lua
+msgid "Cozinheiro"
+msgstr "Cook"
+
+#: formularios.lua funcoes.lua
+msgid "Construtor"
+msgstr "Builder"
+
+#: formularios.lua
+msgid "Escolher"
+msgstr "Choose"
+
+#: formularios.lua
+msgid ""
+"O Ferreiro pode montar varios itens compostos de metais. Seu foco maior "
+"acaba por ser em itens para combate onde pode causar maior dano."
+msgstr ""
+"The Blacksmith can craft items made of metals. Its major focus turns out to "
+"be in combat items where it can cause more damage."
+
+#: formularios.lua
+msgid "Ser Ferreiro"
+msgstr "To be Blacksmith"
+
+#: formularios.lua funcoes.lua
+msgid "Voltar"
+msgstr "Return"
+
+#: formularios.lua
+msgid ""
+"O Cientista possui uma característica especial de montar itens "
+"diversificados. Seu foco costuma estar em utilidades nada convencionais que "
+"as vezes pode surpreender."
+msgstr ""
+"The Scientist has a special feature of craft uncommon items. Its focus is "
+"usually on unconventional utilities that can sometimes surprise."
+
+#: formularios.lua
+msgid "Ser Cientista"
+msgstr "To be Scientist"
+
+#: formularios.lua
+msgid ""
+"O Cozinheiro consegue perceber o que existe de melhor para comer e prepara "
+"sempre bons pratos. Seu enfoque se encontra nos comestíveis."
+msgstr ""
+"The Cook can perceive what is best to eat and always prepares good dishes. "
+"Its focus is on edibles."
+
+#: formularios.lua
+msgid "Ser Cozinheiro"
+msgstr "To be Cook"
+
+#: formularios.lua
+msgid ""
+"O Construtor sempre sabe como erguer uma bela estrutura seja qual for o "
+"material ou necessidade. Seu enfoque vai em itens para estruturar."
+msgstr ""
+"The Builder always knows how to make a beautiful structure whatever the "
+"material or need. Your focus goes on items to structure."
+
+#: formularios.lua
+msgid "Ser Construtor"
+msgstr "To be Builder"
+
+#: formularios.lua
+msgid "Precisa ter os itens requisitados para iniciar a montagem."
+msgstr "You must have the required items to start the craft."
+
+#: formularios.lua
+msgid "Inventário lotado. Esvazie um pouco."
+msgstr "Full inventory. Clean a little."
+
+#: formularios.lua
+msgid "Nível muito baixo. Precisa ter um nível maior para montar esse item."
+msgstr "Very low level. You need to have a higher level to mount this item."
+
+#: formularios.lua
+msgid ""
+"Falta receita em algum ofício. Precisa existir ao menos uma receita para "
+"cada ofício."
+msgstr ""
+"Missing recipes in some metier. There must be at least one recipe for each "
+"metier."
+
+#: funcoes.lua
+msgid "(Nível @1) @2"
+msgstr "(Level @1) @2"
+
+#: funcoes.lua
+msgid "1 dia"
+msgstr "1 day"
+
+#: funcoes.lua
+msgid "@1 dias"
+msgstr "@1 days"
+
+#: funcoes.lua
+msgid "1 hora"
+msgstr "1 hour"
+
+#: funcoes.lua
+msgid "@1 horas"
+msgstr "@1 hours"
+
+#: funcoes.lua
+msgid "1 minuto"
+msgstr "1 minute"
+
+#: funcoes.lua
+msgid "@1 minutos"
+msgstr "@1 minutes"
+
+#: funcoes.lua
+msgid "@1 e @2"
+msgstr "@1 and @2"
+
+#: funcoes.lua
+msgid "@1 Nível @2"
+msgstr "@1 Level @2"
+
+#: funcoes.lua
+msgid "Montando"
+msgstr "Crafting"
+
+#: funcoes.lua
+msgid "Termina em"
+msgstr "Ends in"
+
+#: funcoes.lua
+msgid "Selecione algo para produzir"
+msgstr "Select something to produce"
+
+#: funcoes.lua
+msgid "Seu Desempenho"
+msgstr "Your Performance"
+
+#: funcoes.lua
+msgid "Atualmente @1 XP"
+msgstr "Currently @1 XP"
+
+#: funcoes.lua
+msgid "Próximo Nível @1 XP"
+msgstr "Next Level @1 XP"
+
+#: funcoes.lua
+msgid "Total de @1 itens montados"
+msgstr "Total of @1 items crafted"
+
+#: funcoes.lua
+msgid "Montado"
+msgstr "Crafted"
+
+#: funcoes.lua
+msgid "Coletar"
+msgstr "Collect"
+
+#: funcoes.lua
+msgid "Itens requisitados"
+msgstr "Required Items"
+
+#: funcoes.lua
+msgid "Tempo estimado"
+msgstr "Estimated time"
+
+#: funcoes.lua
+msgid "@1 e 1 hora"
+msgstr "@1 and 1 hour"
+
+#: funcoes.lua
+msgid "@1 e @2 horas"
+msgstr "@1 and @2 hours"
+
+#: funcoes.lua
+msgid "@1 1 hora"
+msgstr "@1 1 hour"
+
+#: funcoes.lua
+msgid "@1 @2 horas"
+msgstr "@1 @2 hours"
+
+#: funcoes.lua
+msgid "@1 e 1 minuto"
+msgstr "@1 and 1 minute"
+
+#: funcoes.lua
+msgid "@1 e @2 minutos"
+msgstr "@1 and @2 minutes"
+
+#: funcoes.lua
+msgid "@1 1 minuto"
+msgstr "@1 1 minute"
+
+#: funcoes.lua
+msgid "@1 @2 minutos"
+msgstr "@1 @2 minutes"
+
+#: funcoes.lua
+msgid "Montar @1"
+msgstr "Craft @1"
+
+#: funcoes.lua
+msgid "Iniciar"
+msgstr "Start"
+
+#: funcoes.lua
+msgid "Recebe @1 XP"
+msgstr "Receive @1 XP"
+
+#: funcoes.lua
+msgid "Ofício"
+msgstr "Metier"

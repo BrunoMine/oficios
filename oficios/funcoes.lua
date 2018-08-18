@@ -1,6 +1,6 @@
 --[[
 	Mod Oficios para Minetest
-	Copyright (C) 2017 BrunoMine (https://github.com/BrunoMine)
+	Copyright (C) 2018 BrunoMine (https://github.com/BrunoMine)
 	
 	Recebeste uma cópia da GNU Lesser General
 	Public License junto com esse software,
@@ -10,7 +10,7 @@
   ]]
 
 
-
+local S = oficios.S
 
 -- Botao de retorno
 local bt_sair = function(loc)
@@ -21,6 +21,13 @@ local bt_sair = function(loc)
 	end
 end
 
+-- Nome exibido de cada oficio
+local nome_oficio_tb = {
+	["ferreiro"] = S("Ferreiro"),
+	["cientista"] = S("Cientista"),
+	["cozinheiro"] = S("Cozinheiro"),
+	["construtor"] = S("Construtor")
+}
 
 -- Show Formspec
 oficios.show_formspec = minetest.show_formspec
@@ -66,7 +73,7 @@ local tabela_IDNome = {}
 -- Tabela de relacionamento de sequencia NomeItem-IDItem
 local dropdown_NomeID = {["ferreiro"]={},["cientista"]={},["cozinheiro"]={},["construtor"]={}}
 oficios.montar_receita = function(oficio, item, nivel, desc, xp, item_requisitado, tempo)
-
+	local st = S("(Nível @1) @2", nivel, minetest.registered_items[item].description)
 	-- Inserindo novos dados nas tabelas
 	oficios.receitas[minetest.registered_items[item].description] = {
 		item=item, 
@@ -77,7 +84,7 @@ oficios.montar_receita = function(oficio, item, nivel, desc, xp, item_requisitad
 		tempo=tempo
 	}
 	table.insert(vetor_niveis[oficio], {nivel=nivel, nome=minetest.registered_items[item].description, item=item})	
-	tabela_IDNome["(Nivel "..nivel..") "..minetest.registered_items[item].description]={
+	tabela_IDNome["(Nível "..nivel..") "..minetest.registered_items[item].description]={
 		item_id=item,
 		item_nome_real=minetest.registered_items[item].description
 	}
@@ -88,14 +95,21 @@ oficios.montar_receita = function(oficio, item, nivel, desc, xp, item_requisitad
 	-- Ordenar
 	vetor_niveis[oficio] = ordenar_por_nivel(vetor_niveis[oficio], lim)
 
-	-- Escrever lista
-	lista_receitas[oficio] = "(Nivel "..vetor_niveis[oficio][1].nivel..") "..vetor_niveis[oficio][1].nome
-	dropdown_NomeID[oficio]["(Nivel "..vetor_niveis[oficio][1].nivel..") "..vetor_niveis[oficio][1].nome]=1
-	local i = 2
-	while (i <= lim) do
-		dropdown_NomeID[oficio]["(Nivel "..vetor_niveis[oficio][i].nivel..") "..vetor_niveis[oficio][i].nome]=i
-		lista_receitas[oficio] = lista_receitas[oficio]..",(Nivel "..vetor_niveis[oficio][i].nivel..") "..vetor_niveis[oficio][i].nome
-		i = i + 1
+	-- Re/Escrever lista
+	lista_receitas[oficio] = ""
+	for 
+		i=1, 
+		lim 
+	do
+		local stn = S("(Nível @1) @2", vetor_niveis[oficio][i].nivel, vetor_niveis[oficio][i].nome)
+		-- Atualiza index da tabela com nova string traduzida
+		tabela_IDNome[stn]={
+			item_id=vetor_niveis[oficio][i].item,
+			item_nome_real=vetor_niveis[oficio][i].nome
+		}
+		dropdown_NomeID[oficio][stn]=i
+		if lista_receitas[oficio] ~= "" then lista_receitas[oficio] = lista_receitas[oficio] .. "," end
+		lista_receitas[oficio] = lista_receitas[oficio]..stn
 	end
 end
 -- Fim de Montar Receitas
@@ -325,31 +339,31 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				local tempo_escrito = ""
 				if tempo[1] > 0 then
 					if tempo[1] == 1 then
-						tempo[1] = tempo[1].." dia"
+						tempo[1] = S("1 dia")
 					else
-						tempo[1] = tempo[1].." dias"
+						tempo[1] = S("@1 dias", tempo[1])
 					end
 				end
 				if tempo[2] > 0 then
 					if tempo[2] == 1 then
-						tempo[2] = tempo[2].." hora"
+						tempo[2] = S("1 hora")
 					else
-						tempo[2] = tempo[2].." horas"
+						tempo[2] = S("@1 horas", tempo[2])
 					end
 				end
 				if tempo[3] > 0 then
 					if tempo[3] == 1 then
-						tempo[3] = tempo[3].." minuto"
+						tempo[3] = S("1 minuto")
 					else
-						tempo[3] = tempo[3].." minutos"
+						tempo[3] = S("@1 minutos", tempo[3])
 					end
 				end
 				
 				if dias > 0 and horas > 0 then
-					tempo_escrito = tempo[1].." e "..tempo[2]
+					tempo_escrito = S("@1 e @2", tempo[1], tempo[2])
 				else
 					if horas > 0 and minutos > 0 then
-						tempo_escrito = tempo[2].." e "..tempo[3]
+						tempo_escrito = S("@1 e @2", tempo[2], tempo[3])
 					else
 						if dias > 0 then
 							tempo_escrito = tempo[1]
@@ -370,13 +384,13 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
-					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
+					"label[2.2,-0.1;"..S("@1 Nível @2", nome_oficio_tb[oficio], registros_oficios[name].nivel).."]"..
 					-- Painel de espera
-					"label[4.3,0.6;Montando \n"..registros_oficios[name].montagem.item..
-					"\n\nTermina em \n"..tempo_escrito.."]"..
+					"label[4.3,0.6;"..S("Montando").." \n"..registros_oficios[name].montagem.item..
+					"\n\n"..S("Termina em").." \n"..tempo_escrito.."]"..
 					"item_image_button[2.2,0.6;2,2;"..item_id..";;]"..
 					-- Botao sair
-					bt_sair("6.9,3.3;1.2,1")	
+					bt_sair("6.9,3.3;1.2,1")
 				
 			end
 
@@ -384,7 +398,6 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 		
 			if registros_oficios[name].coletar == "" then
 	
-
 				-- Gerar painel normal
 				local xp_prox_nivel = OFICIOS_NIVEIS[(registros_oficios[name].nivel+1)]
 				formspec = "size[8,8.5]"..
@@ -393,18 +406,18 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
-					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
+					"label[2.2,-0.1;"..S("@1 Nível @2", nome_oficio_tb[oficio], registros_oficios[name].nivel).."]"..
 					-- Botao sair
 					bt_sair("6.9,3.3;1.2,1")..
 					-- Painel de Montagem
 					"dropdown[2.2,0.35;6.15,1;item_selecionado;"..lista_receitas[oficio]..";]"..
-					"label[2.2,1.1;Selecione algo para produzir]"
+					"label[2.2,1.1;"..S("Selecione algo para produzir").."]"
 				-- Calcular e inserir dados de desempenho 
-				formspec = formspec .. "label[0.2,2.3;Seu Desempenho \nAtualmente "..registros_oficios[name].xp.." XP "
+				formspec = formspec .. "label[0.2,2.3;"..S("Seu Desempenho").." \n"..S("Atualmente @1 XP", registros_oficios[name].xp)
 				if registros_oficios[name].nivel < LIMITE_DE_NIVEL then
-					formspec = formspec .. "\nProximo Nivel "..xp_prox_nivel.." XP"
+					formspec = formspec .. "\n"..S("Próximo Nível @1 XP", xp_prox_nivel)
 				end
-				formspec = formspec .. "\nTotal de "..registros_oficios[name].total_itens.." itens montados]"
+				formspec = formspec .. "\n"..S("Total de @1 itens montados", registros_oficios[name].total_itens).."]"
 	
 			else
 
@@ -415,11 +428,11 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 					inv_formspec(0,4.25)..
 					-- Cabecalho do Oficio
 					"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
-					"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
+					"label[2.2,-0.1;"..S("@1 Nível @2", nome_oficio_tb[oficio], registros_oficios[name].nivel).."]"..
 					-- Painel de conclusao
 					"label[2.3,0.4;"..minetest.registered_items[registros_oficios[name].coletar].description.."]"..
-					"label[5.2,1;Montado]"..
-					"item_image_button[2.2,1;3,3;"..registros_oficios[name].coletar..";coletar;Coletar]"..
+					"label[5.2,1;"..S("Montado").."]"..
+					"item_image_button[2.2,1;3,3;"..registros_oficios[name].coletar..";coletar;"..S("Coletar").."]"..
 					-- Botao sair
 					bt_sair()
 
@@ -438,14 +451,14 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				inv_formspec(0,4.75)..
 				-- Cabecalho do Oficio
 				"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
-				"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
+				"label[2.2,-0.1;"..S("@1 Nível @2", nome_oficio_tb[oficio], registros_oficios[name].nivel).."]"..
 				-- Dados sobre a Montagem
 				"label[2.2,1.1;"..item_nome_real.."]"..
 				"item_image_button[0.1,2.5;2,2;"..dados.item..";item;]"..
 				-- descricao
-				"label[2.2,1.7;"..dados.desc.."]"..
+				"textarea[2.45,1.7;4.8,3.1;;"..dados.desc..";]"..
 				-- Botao voltar
-				"button[6.9,3.3;1.2,1;voltar_ao_item;Voltar]"..
+				"button[6.9,3.3;1.2,1;voltar_ao_item;"..S("Voltar").."]"..
 				-- Painel de Montagem
 				"dropdown[2.2,0.35;6.15,1;item_selecionado;"..lista_receitas[oficio]..";"..dropdown_NomeID[oficio][receita_visualizada[name]].."]"
 
@@ -460,7 +473,7 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 				default.gui_bg..
 				default.gui_bg_img..
 				inv_formspec(0,4.75)..
-				"label[2.2,3.1;Itens requisitados]"
+				"label[2.2,3.1;"..S("Itens requisitados").."]"
 			if item_requisitado[1] ~= nil then
 				formspec = formspec .. "item_image_button[2.2,3.5;1,1;"..item_requisitado[1][1].." "..item_requisitado[1][2]..";item_req1;]"
 			end
@@ -481,38 +494,38 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 			end
 			-- Colocando Tempo de montagem
 			local tempo = oficios.receitas[item_nome_real].tempo
-			formspec = formspec .. "label[2.2,1.6;Tempo estimado \n"
+			formspec = formspec .. "label[2.2,1.6;"..S("Tempo estimado").." \n"
 			if tempo[1] > 0 then
 				if tempo[1] == 1 then
-					formspec = formspec .. tempo[1].." dia" 
+					formspec = formspec .. S("1 dia") 
 				else
-					formspec = formspec .. tempo[1].." dias"
+					formspec = formspec .. S("@1 dias", tempo[1])
 				end
 				if tempo[2] > 0 then
 					if tempo[2] == 1 then
-						formspec = formspec .. " e "..tempo[2].." hora"
+						formspec = S("@1 e 1 hora", formspec) 
 					else
-						formspec = formspec .. " e "..tempo[2].." horas"
+						formspec = S("@1 e @2 horas", formspec, tempo[1])
 					end
 				end
 			elseif tempo[2] > 0 then
 				if tempo[2] == 1 then
-					formspec = formspec .. tempo[2].." hora" 
+					formspec = S("@1 1 hora") 
 				else
-					formspec = formspec .. tempo[2].." horas"
+					formspec = S("@1 @2 horas", formspec, tempo[1])
 				end
 				if tempo[3] > 0 then
 					if tempo[3] == 1 then
-						formspec = formspec .. " e "..tempo[3].." minuto"
+						formspec = S("@1 e 1 minuto", formspec) 
 					else
-						formspec = formspec .. " e "..tempo[3].." minutos"
+						formspec = S("@1 e @2 minutos", formspec, tempo[1])
 					end
 				end
 			else
 				if tempo[3] == 1 then
-					formspec = formspec .. tempo[3].." minuto"
+					formspec = S("@1 1 minuto", formspec) 
 				else
-					formspec = formspec .. tempo[3].." minutos"
+					formspec = S("@1 @2 minutos", formspec, tempo[1])
 				end
 			end
 			formspec = formspec .. "]"
@@ -520,16 +533,16 @@ oficios.gerar_menu_oficio = function(name, item_nome)
 			formspec = formspec .. 
 				-- Cabecalho do Oficio
 				"image[0,0;2.5,2.5;oficios_"..oficio..".png]"..
-				"label[2.2,-0.1;"..string.upper(oficio).." Nivel "..registros_oficios[name].nivel.."]"..
+				"label[2.2,-0.1;"..S("@1 Nível @2", nome_oficio_tb[oficio], registros_oficios[name].nivel).."]"..
 				-- Painel de Montagem
 				"dropdown[2.2,0.35;6.15,1;item_selecionado;"..lista_receitas[oficio]..";"..dropdown_NomeID[oficio][item_nome].."]"..
 				-- Dados sobre a Montagem
-				"label[2.2,1.1;Montar "..item_nome_real.."]"..
-				"item_image_button[0.1,2.5;2,2;"..item_id..";iniciar;Iniciar]"..
-				"label[2.2,2.5;Recebe "..core.colorize("#00FF00", oficios.receitas[item_nome_real].xp.." XP").."]"..
+				"label[2.2,1.1;"..S("Montar @1", item_nome_real).."]"..
+				"item_image_button[0.1,2.5;2,2;"..item_id..";iniciar;"..S("Iniciar").."]"..
+				"label[2.2,2.5;"..S("Recebe @1 XP", core.colorize("#00FF00", oficios.receitas[item_nome_real].xp)).."]"..
 				"image_button[7,1.3;1,1;oficios_botao_desc.png;desc;]"..
 				-- Botao voltar
-				"button[6.9,2.3;1.2,1;voltar;Voltar]"
+				"button[6.9,2.3;1.2,1;voltar;"..S("Voltar").."]"
 		end
 
 	end
@@ -580,7 +593,7 @@ end
 -- Registrar em 'sfinv'
 if sfinv then
 	sfinv.register_page("oficios:oficio", {
-		title = "Oficio",
+		title = S("Ofício"),
 		get = function(self, player, context)
 			if context.formspec then
 				return sfinv.make_formspec(player, context, context.formspec, true)

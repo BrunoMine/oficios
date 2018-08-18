@@ -1,0 +1,7 @@
+oficios
+shields
+musket?
+default
+farming
+fire
+tnt
