@@ -8,9 +8,7 @@
 ## Requitos
 * Minetest 0.5.0 ou superior
 * Mod shields
-* Mod shooter
-* Mod macronodes
-* Mod macronodes (opicional)
+* Mod shooter (opicional)
 * Mod sfinv (opicional)
 * Mod default
 * Mod wool
