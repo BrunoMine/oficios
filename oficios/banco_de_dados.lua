@@ -11,27 +11,35 @@
 
 oficios.bd = {}
 
+-- Mod storage
+local mod_storage = minetest.get_mod_storage()
+
 -- Variavel de registros
 registros_oficios = {}
 
 -- Carregar registros de oficios salvos
-local path = minetest.get_worldpath() .. "/oficios"
+--local path = minetest.get_worldpath() .. "/oficios"
 -- Cria o diretorio caso nao exista ainda
-local function mkdir(path)
-	if minetest.mkdir then
-		minetest.mkdir(path)
-	else
-		os.execute('mkdir "' .. path .. '"')
-	end
-end
-mkdir(path)
+--local function mkdir(path)
+--	if minetest.mkdir then
+--		minetest.mkdir(path)
+--	else
+--		os.execute('mkdir "' .. path .. '"')
+--	end
+--end
+--mkdir(path)
+
+-- Carrega dados na tabela quando o jogador conecta
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
-	local input = io.open(path .. "/oficios_"..name, "r")
-	if input then
-		registros_oficios[name] = minetest.deserialize(input:read("*l"))
-		io.close(input)
-	end
+	
+	registros_oficios[name] = minetest.deserialize(mod_storage:get_string("player:"..name))
+	
+	--local input = io.open(path .. "/oficios_"..name, "r")
+	--if input then
+	--	registros_oficios[name] = minetest.deserialize(input:read("*l"))
+	--	io.close(input)
+	--end
 end)
 
 -- Retira da memoria quando o jogador sai
@@ -42,9 +50,10 @@ end)
 
 -- Salvar registros de oficios
 oficios.bd.salvar = function(name)
-	local output = io.open(path .. "/oficios_"..name, "w")
-	output:write(minetest.serialize(registros_oficios[name]))
-	io.close(output)
+	mod_storage:set_string("player:"..name, minetest.serialize(registros_oficios[name]))
+	--local output = io.open(path .. "/oficios_"..name, "w")
+	--output:write(minetest.serialize(registros_oficios[name]))
+	--io.close(output)
 end
 
 -- Inserir registro
